@@ -1,3 +1,5 @@
+# I. Gaussian Distribution
+
 ## Multivariate Gaussian Density Function
 
 $$
