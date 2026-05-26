@@ -4,7 +4,16 @@ $$
 \mathcal{N} (x \vert \mu, \Sigma) = \frac{\exp( - \frac{1}{2} (x - \mu)^T \Sigma ^{-1} (x - \mu) )}{\sqrt{(2\pi)^k \vert \Sigma \vert }}
 $$
 
-Where: $\mu:$ mean matrix, $\Sigma: $ covariance matrix, $x: $ data, $k: $ dimensions of data.
+Where: 
+
+$$
+\begin{cases}
+x: \text{data}, \\
+\mu: \text{mean matrix}, \\
+\Sigma: \text{covariance matrix}, \\
+k:  \text{dimensions of data.}
+\end{cases}
+$$
 
 ## Multivariate Gaussian Log Density Function
 
@@ -14,7 +23,13 @@ $$
 
 ## Gradient of Multivariate Gaussian Density Function
 
-Let: $C = \frac{1}{\sqrt{(2\pi)^k \vert \Sigma \vert}}$. By the chain rule, we have:
+Let: 
+
+$$
+C = \frac{1}{\sqrt{(2\pi)^k \vert \Sigma \vert}}
+$$ 
+
+By the chain rule, we have:
 
 $$
 \nabla_x \mathcal{N} (x \vert \mu, \Sigma) = C \exp(- \frac{1}{2} (x - \mu)^T \Sigma ^{-1} (x - \mu)) \nabla_x (- \frac{1}{2} (x - \mu)^T \Sigma ^{-1} (x - \mu))
@@ -32,7 +47,7 @@ $$
 \nabla_x \mathcal{N} (x \vert \mu, \Sigma) = C \exp(- \frac{1}{2} (x - \mu)^T \Sigma ^{-1} (x - \mu)) \times (\Sigma^{-1} (x-\mu)) = \frac{\exp(- \frac{1}{2} (x - \mu)^T \Sigma ^{-1} (x - \mu)) \times (\Sigma^{-1} (x-\mu))}{\sqrt{(2\pi)^k \vert \Sigma \vert}}
 $$
 
-## Gradient of Multivariate Gaussian Log Density Function
+## Gradient of Multivariate Gaussian Log Density Function/Score Fuction
 
 $$
 \nabla_x \log(\mathcal{N} (x \vert \mu, \Sigma)) = - \Sigma^{-1} (x-\mu)
