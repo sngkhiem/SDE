@@ -74,3 +74,8 @@ $$
 $$
 \nabla_x \log(\mathcal{N} (x \vert \mu, \Sigma)) = - \Sigma^{-1} (x-\mu)
 $$
+
+# References:
+
+[Matrix Calculus](https://github.com/LynnHo/Matrix-Calculus-Tutorial)
+
