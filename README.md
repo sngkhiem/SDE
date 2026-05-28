@@ -2,6 +2,8 @@ This is my note and my self derived math for learning Diffusion and relevant thi
 
 # I. Gaussian Distribution and its gradient
 
+## Standard Gaussian
+
 ## Multivariate Gaussian Density Function
 
 $$
@@ -178,6 +180,141 @@ $$
 
 ## 3. Langevin Dynamics
 
+To make gradient ascent become a sampling method, Langevin dynamics adds Gaussian noise:
+
+$$
+x_{k+1} = x_k + \eta \nabla_x \log p(x_k) + \sqrt{2 \eta} \epsilon_k = x_k + \eta s(x_k) + \sqrt{2\eta}\epsilon_k
+$$
+
+where:
+
+$$
+\epsilon_k \sim \mathcal{N}(0,I)
+$$
+
+
+### Example: Standard Gaussian
+
+Let:
+
+$$
+p(x) = \mathcal{N}(0,I)
+$$
+
+The log-density is:
+
+$$
+\log p(x) = -\frac{1}{2}x^Tx + C
+$$
+
+where $C$ is constant with respect to $x$. Taking the gradient:
+
+$$
+\nabla_x \log p(x) = -x
+$$
+
+Therefore, the Langevin update becomes:
+
+$$
+x_{k+1} = x_k + \eta(-x_k) + \sqrt{2\eta}\epsilon_k = (1-\eta)x_k + \sqrt{2\eta}\epsilon_k
+$$
+
+We can obvious see the first term $(1-\eta)x_k$ force the sample toward the mean $0$. But it do not go straight here because we have the second term that inject noise to this process, that make the sample keeps moving around the high-density region.
+
+The next section will show how and why we can inject noise but still reserve our source distribution, this just work in this specific case not generalization. The author of blog [Langevin Diffusion Tutorial: Hands-on Introduction](https://www.peterholderrieth.com/blog/2023/Langevin-Dynamics-An-introduction-for-Machine-Learning-Engineers/) has a good more generalize version.
+
+### Mean of the update
+
+Consider the $1 \text{-d}$ case:
+
+$$
+x_{k+1} = (1-\eta)x_k + \sqrt{2\eta}\epsilon_k
+$$
+
+where:
+
+$$
+\epsilon_k \sim \mathcal{N}(0, 1)
+$$
+
+Taking expectation both sides, we have:
+
+$$
+\mathbb{E}[x_{k+1}] = \mathbb{E}[(1-\eta)x_k + \sqrt{2\eta}\epsilon_k]
+$$
+
+Since:
+
+$$
+\mathbb{E}[\epsilon_k] = 0
+$$
+
+We have:
+
+$$
+\mathbb{E}[x_{k+1}] = (1-\eta)\mathbb{E}[x_k]
+$$
+
+With $0 < \eta < 1$, $\mathbb{E}[x_k] \rightarrow 0$, thus we can confirm that the mean of the samples move toward to mean of the target Gaussian.
+
+### Variance of the update
+
+Let:
+
+$$
+v_k = \mathrm{Var}(x_k)
+$$
+
+Using:
+
+$$
+x_{k+1} = (1-\eta)x_k + \sqrt{2\eta}\epsilon_k
+$$
+
+Assuming $x_k$ and $\epsilon_k$ are independent, we have:
+
+$$
+\mathrm{Var}(x_{k+1}) = \mathrm{Var}((1-\eta)x_k) + \mathrm{Var}(\sqrt{2\eta}\epsilon_k)
+$$
+
+Therefore:
+
+$$
+v_{k+1} = (1-\eta)^2v_k + 2\eta
+$$
+
+At equilibrium, the variance does not change, so:
+
+$$
+v_{k+1} = v_k = v
+$$
+
+Thus:
+
+$$
+v = (1-\eta)^2v + 2\eta 
+$$
+
+Factor $v$, we have:
+
+$$
+\begin{aligned}
+v - (1-\eta)^2v &= 2\eta \\
+v[1-(1-\eta)^2] &= 2\eta \\
+v[1-1+2\eta - \eta^2] &= 2\eta \\
+v(2\eta-\eta^2) &= 2\eta \\
+\end{aligned}
+$$
+
+And:
+
+$$
+v = \frac{2\eta}{2\eta-\eta^2} = \frac{2}{2-\eta} = 1 \quad \text{when } \eta \rightarrow 0
+$$
+
+So for the enough small step $\eta$, the Langevin update approximately preserves the variance of the standard Gaussian. 
+
+ 
 # References:
 
 [The Principles of Diffusion Models](https://arxiv.org/abs/2510.21890)
